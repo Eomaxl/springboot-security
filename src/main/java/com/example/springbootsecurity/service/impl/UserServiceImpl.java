@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(new HashSet<>());
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
@@ -40,6 +41,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addToUser(String username, String rolename){
+        System.out.println("username received :: "+username);
+        System.out.println("email address :: "+userRepository.findByEmail(username));
         if(!userRepository.findByEmail(username).isPresent()){
             throw new IllegalArgumentException(("User with email "+username+" does not exist."));
         }
@@ -51,5 +54,9 @@ public class UserServiceImpl implements UserService {
         user.getRoles().add(role);
     }
 
-
+    @Override
+    public List<User> fetchAllUser(){
+        List<User> userList = userRepository.findAll();
+        return userList;
+    }
 }

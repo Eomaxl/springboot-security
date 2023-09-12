@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
-@Entity
+@Data
 @Getter
 @Setter
-@Data
 @NoArgsConstructor
+@Entity
 @Table(name="Users")
 public class User implements UserDetails {
 
@@ -37,7 +37,8 @@ public class User implements UserDetails {
     private Date createdOn;
     private Date updatedOn;
 
-    public User(String mobileNumber, String userName, String email, String password, Set<Role> roles){
+    public User(String userId,String mobileNumber, String userName, String email, String password, Set<Role> roles){
+        this.userId = userId;
         this.mobileNumber = mobileNumber;
         this.userName = userName;
         this.email = email;
