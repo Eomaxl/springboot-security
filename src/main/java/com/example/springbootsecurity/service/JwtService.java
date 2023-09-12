@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
-    @Value("${secret.key}")
-    private final String secretKey;
+//    @Value("${secret.key}")
+    private final String secretKey="123";
 
     @Autowired
     private UserRepository userRepository;
