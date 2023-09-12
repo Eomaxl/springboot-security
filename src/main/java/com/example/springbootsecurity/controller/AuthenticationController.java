@@ -1,6 +1,7 @@
 package com.example.springbootsecurity.controller;
 
 import com.example.springbootsecurity.auth.AuthenticationRequest;
+import com.example.springbootsecurity.auth.RegisterRequest;
 import com.example.springbootsecurity.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
+        return ResponseEntity.ok(authenticationService.register(registerRequest));
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest){

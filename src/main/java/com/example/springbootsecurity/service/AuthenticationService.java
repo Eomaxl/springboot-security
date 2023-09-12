@@ -2,6 +2,7 @@ package com.example.springbootsecurity.service;
 
 import com.example.springbootsecurity.auth.AuthenticationRequest;
 import com.example.springbootsecurity.auth.AuthenticationResponse;
+import com.example.springbootsecurity.auth.RegisterRequest;
 import com.example.springbootsecurity.model.Role;
 import com.example.springbootsecurity.model.User;
 import com.example.springbootsecurity.repository.RoleCustomRepo;
@@ -25,6 +26,22 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final RoleCustomRepo roleCustomRepo;
     private final UserService userService;
+
+    public ResponseEntity<?> register(RegisterRequest registerRequest){
+        try{
+            if(userRepository.existsById(registerRequest.getEmail())){
+                throw new IllegalArgumentException("User with "+registerRequest.getEmail()+" email already exists");
+            }
+            userService.saveUser(new User("",registerRequest.getMobileNumber(),registerRequest.getUserName(),registerRequest.getEmail(), registerRequest.getPassword(),new HashSet<>()));
+            userService.addToUser(registerRequest.getEmail(),"ROLE_USER");
+            User user = userRepository.findByEmail(registerRequest.getEmail()).orElseThrow();
+            return ResponseEntity.ok(user);
+        } catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     public ResponseEntity<?> authenticate(AuthenticationRequest authenticationRequest){
         try{
